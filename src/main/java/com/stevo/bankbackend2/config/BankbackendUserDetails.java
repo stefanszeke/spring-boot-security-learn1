@@ -29,6 +29,8 @@ public class BankbackendUserDetails implements UserDetailsService {
     List<GrantedAuthority> authorities = new ArrayList<>();
     List<Customer> customers = customerRepository.findByEmail(username);
 
+    System.out.println("** BankbackendUserDetails: loadUserByUsername running **");
+
     if(customers.size() == 0) {
       throw new UsernameNotFoundException("User not found: " + username);
     } else {
@@ -39,7 +41,7 @@ public class BankbackendUserDetails implements UserDetailsService {
       authorities.add(new SimpleGrantedAuthority(customers.get(0).getRole()));
     }
 
-
     return new User(userName, password, authorities);
   }
+
 }
