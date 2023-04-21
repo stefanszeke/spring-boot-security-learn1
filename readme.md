@@ -4,7 +4,7 @@
 3. user details service custom = Bankbackend user details
     - find by username (email)
     - @Override loadUserByUsername = creates userdetails object, to be used by spring security
-    - @Service to make it a bean, and override the in-memory user details service
+    - to injected into the authentication provider
 4. customer controller
 5. password encoder
     - register Bcrypt password encoder as PasswordEncoder @Bean
