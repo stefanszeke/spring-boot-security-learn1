@@ -13,4 +13,6 @@
     - @Bean
     - @Override authenticate
     - @Override supports - authentication manager will call this method to check if this provider can handle the authentication request( is the authentication object of the correct type)
-in authentication provider we use userDetailsService to load the user from the db and then compare the password 
+in authentication provider we use userDetailsService to load the user from the db and then compare the password
+8. adding rest of the models, controllers and repos 
+9. setting up cors on security config,(not on controller level)

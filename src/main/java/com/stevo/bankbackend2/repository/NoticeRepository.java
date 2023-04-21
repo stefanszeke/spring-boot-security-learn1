@@ -11,7 +11,7 @@ import com.stevo.bankbackend2.model.Notice;
 @Repository
 public interface NoticeRepository extends CrudRepository<Notice, Long> {
 	
-	@Query(value = "from Notice n where CURDATE() BETWEEN noticBegDt AND noticEndDt")
+	@Query(value = "from Notice n where CURRENT_DATE BETWEEN noticBegDt AND noticEndDt")
 	List<Notice> findAllActiveNotices();
 
 }

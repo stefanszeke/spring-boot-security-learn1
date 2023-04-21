@@ -3,7 +3,9 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-    "email": "user3@mail.com",
-    "pwd": "123",
-    "role": "user"
+  "name": "test1",
+  "email": "test1@mail.com",
+  "mobileNumber": "1234567890",
+  "pwd": "123",
+  "role": "user"
 }

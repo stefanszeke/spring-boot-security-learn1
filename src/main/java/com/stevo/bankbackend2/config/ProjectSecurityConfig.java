@@ -2,32 +2,44 @@ package com.stevo.bankbackend2.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 @Configuration
 public class ProjectSecurityConfig {
 
-
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
+
+
+
+    http
+        .cors(cors -> {
+          cors.configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.addAllowedOrigin("http://localhost:4200");
+            config.addAllowedMethod("*");
+            config.addAllowedHeader("*");
+            config.setAllowCredentials(true);
+            config.setMaxAge(3600L);
+            return config;
+          });
+        })
+
+        .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/contact", "/register"))
+
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/MyAccount", "/MyBalance", "/MyLoans", "/MyCards", "/user").authenticated()
             .requestMatchers("/contact", "/notices", "/register").permitAll()
-            .anyRequest().authenticated()
-        )
+            .anyRequest().authenticated())
+
         .formLogin(withDefaults())
         .httpBasic(withDefaults());
 
@@ -38,13 +50,6 @@ public class ProjectSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
-
-
-
-
-
-
 
   // @Bean
   // public InMemoryUserDetailsManager userDetailsService() {
