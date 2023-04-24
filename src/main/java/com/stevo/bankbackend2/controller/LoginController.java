@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -47,15 +49,11 @@ public class LoginController {
     return response;
   }
 
-  @RequestMapping("/user")
+  @GetMapping("/user")
   public Customer getUserDetailsAfterLogin(Authentication authentication) {
     List<Customer> customers = customerRepository.findByEmail(authentication.getName());
-    if (customers.size() > 0) {
-      return customers.get(0);
-    } else {
-      return null;
-    }
 
+    return customers.size() > 0 ? customers.get(0) : null;
   }
 
 }

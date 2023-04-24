@@ -16,3 +16,5 @@
 in authentication provider we use userDetailsService to load the user from the db and then compare the password
 8. adding rest of the models, controllers and repos 
 9. setting up cors on security config,(not on controller level)
+10. csrf setup on security config
+11. create a filter to send the csrf token to the client with every response

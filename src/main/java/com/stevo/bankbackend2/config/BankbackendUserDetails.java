@@ -29,8 +29,6 @@ public class BankbackendUserDetails implements UserDetailsService {
     List<GrantedAuthority> authorities = new ArrayList<>();
     List<Customer> customers = customerRepository.findByEmail(username);
 
-    System.out.println("** BankbackendUserDetails: loadUserByUsername running **");
-
     if(customers.size() == 0) {
       throw new UsernameNotFoundException("User not found: " + username);
     } else {

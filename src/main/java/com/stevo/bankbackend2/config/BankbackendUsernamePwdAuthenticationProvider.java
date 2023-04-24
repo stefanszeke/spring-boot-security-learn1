@@ -35,8 +35,6 @@ public class BankbackendUsernamePwdAuthenticationProvider implements Authenticat
 
     UserDetails customer = userDetailsService.loadUserByUsername(username);
 
-    System.out.println("** BankbackendUsernamePwdAuthenticationProvider: authenticate running **");
-
     if(passwordEncoder.matches(pwd, customer.getPassword()) == false) {
       throw new BadCredentialsException("Wrong password");
     }
@@ -44,10 +42,8 @@ public class BankbackendUsernamePwdAuthenticationProvider implements Authenticat
     List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.addAll(customer.getAuthorities());
 
-
-    System.out.println("authorities: " + authorities);
-    return new UsernamePasswordAuthenticationToken(pwd, customer, authorities);
-    
+    return new UsernamePasswordAuthenticationToken(username, pwd, authorities);
+  
   }
 
   @Override
