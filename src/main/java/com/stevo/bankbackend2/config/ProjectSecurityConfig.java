@@ -26,8 +26,8 @@ public class ProjectSecurityConfig {
     csrfTokenHandler.setCsrfRequestAttributeName("_csrf");
 
     http
-        .securityContext( securityContext -> securityContext.requireExplicitSave(false))
-        .sessionManagement( sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        .securityContext(securityContext -> securityContext.requireExplicitSave(false))
+        .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 
         .cors(cors -> {
           cors.configurationSource(request -> {
@@ -43,15 +43,20 @@ public class ProjectSecurityConfig {
 
         .csrf(csrf -> csrf
             .csrfTokenRequestHandler(csrfTokenHandler)
-            .ignoringRequestMatchers("/contact", "/register")
+            .ignoringRequestMatchers("/register")
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 
         .addFilterAfter(new csrfCookieFilter(), BasicAuthenticationFilter.class)
         // after the BasicAuthenticationFilter is executed, execute the csrfCookieFilter
 
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/MyAccount", "/MyBalance", "/MyLoans", "/MyCards", "/user").authenticated()
-            .requestMatchers("/contact", "/notices", "/register").permitAll()
+            .requestMatchers("/myAccount").hasRole("USER")
+            .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
+            .requestMatchers("/myLoans").hasRole("USER")
+            .requestMatchers("/myCards").hasRole("USERS")
+
+            .requestMatchers("/user").authenticated()
+            .requestMatchers("/notices", "/register").permitAll()
             .anyRequest().authenticated())
 
         .formLogin(withDefaults())
@@ -64,6 +69,17 @@ public class ProjectSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+
+  // Authorization
+  // .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+  // .requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT", "VIEWBALANCE")
+  // .requestMatchers("/myLoans").hasAuthority( "VIEWLOANS")
+  // .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+
+  // authentication
+  // .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards",
+  // "/user","/contact").authenticated()
 
   // @Bean
   // public InMemoryUserDetailsManager userDetailsService() {
