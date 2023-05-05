@@ -12,6 +12,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.stevo.bankbackend2.filter.AuthLoggingAfterFilter;
+import com.stevo.bankbackend2.filter.AuthLoggingAtFilter;
+import com.stevo.bankbackend2.filter.RequestValidationBeforeFilter;
 import com.stevo.bankbackend2.filter.csrfCookieFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -46,8 +49,11 @@ public class ProjectSecurityConfig {
             .ignoringRequestMatchers("/register")
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 
+        .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+        .addFilterAt(new AuthLoggingAtFilter(), BasicAuthenticationFilter.class)
         .addFilterAfter(new csrfCookieFilter(), BasicAuthenticationFilter.class)
-        // after the BasicAuthenticationFilter is executed, execute the csrfCookieFilter
+        .addFilterAfter(new AuthLoggingAfterFilter(), BasicAuthenticationFilter.class)
+
 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/myAccount").hasRole("USER")
@@ -69,7 +75,6 @@ public class ProjectSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
 
   // Authorization
   // .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")

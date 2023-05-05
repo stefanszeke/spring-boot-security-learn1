@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "name": "test1",
-  "email": "test1@mail.com",
+  "email": "tt@tt.tt",
   "mobileNumber": "1234567890",
-  "pwd": "123",
-  "role": "user"
+  "pwd": "12345",
+  "role": "USER"
 }
